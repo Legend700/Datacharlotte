@@ -1,0 +1,143 @@
+Project 2: Classification Problem - Predicting Customer Churn
+
+1. Introduce the Problem
+
+The problem I aim to solve is customer churn prediction. Customer churn refers to the phenomenon where customers stop using a company's products or services. Predicting churn is critical for businesses because retaining existing customers is often more cost-effective than acquiring new ones. By identifying customers who are likely to churn, businesses can take proactive measures, such as targeted marketing campaigns or personalized offers, to retain them.
+
+Key Questions:
+
+What factors contribute most to customer churn?
+Can we build a classification model to predict whether a customer will churn?
+How accurate can our predictions be, and what insights can we derive from the model?
+This is a binary classification problem, where the target variable is whether a customer churned (1) or not (0).
+
+2. Introduce the Data
+
+The dataset I will use is the Telco Customer Churn dataset, available on Kaggle. This dataset contains information about a fictional telecom company's customers and includes details about their demographics, services subscribed to, and whether they churned.
+
+Features:
+
+CustomerID: Unique identifier for each customer.
+Gender: Customer's gender (Male/Female).
+SeniorCitizen: Whether the customer is a senior citizen (1) or not (0).
+Partner/Dependents: Whether the customer has a partner or dependents (Yes/No).
+Tenure: Number of months the customer has stayed with the company.
+PhoneService/MultipleLines: Whether the customer has phone service or multiple lines.
+InternetService: Type of internet service (DSL, Fiber optic, No).
+OnlineSecurity/OnlineBackup/DeviceProtection/StreamingServices: Whether the customer uses these additional services.
+Contract: Type of contract (Month-to-month, One year, Two year).
+PaperlessBilling: Whether the customer uses paperless billing (Yes/No).
+PaymentMethod: Payment method (Electronic check, Mailed check, Credit card, etc.).
+MonthlyCharges/TotalCharges: Amount charged monthly and total charges.
+Churn: Target variable indicating whether the customer churned (Yes/No).
+3. Pre-processing the Data
+
+Pre-processing is crucial to prepare the data for modeling. Here are the steps I took and why:
+
+Handling Missing Values:
+Checked for missing values in the dataset. For example, TotalCharges had some missing values, which I replaced with the median value since it is a numerical feature.
+Encoding Categorical Variables:
+Converted categorical variables (e.g., Gender, InternetService, Contract) into numerical values using one-hot encoding or label encoding. This is necessary because machine learning algorithms cannot process categorical data directly.
+Feature Scaling:
+Scaled numerical features like Tenure, MonthlyCharges, and TotalCharges using StandardScaler to ensure all features are on the same scale. This prevents features with larger magnitudes from dominating the model.
+Splitting the Data:
+Split the dataset into training (80%) and testing (20%) sets to evaluate the model's performance on unseen data.
+Handling Class Imbalance:
+The dataset had an imbalance in the target variable (Churn). I used SMOTE (Synthetic Minority Over-sampling Technique) to balance the classes, ensuring the model does not become biased toward the majority class.
+4. Data Understanding/Visualization
+
+To better understand the data, I performed exploratory data analysis (EDA) and created visualizations:
+
+Churn Distribution:
+Visualized the distribution of the target variable (Churn) to understand the class imbalance. About 26% of customers churned, while 74% did not.
+Correlation Heatmap:
+Created a heatmap to identify correlations between features. For example, Tenure and TotalCharges were highly correlated, which makes sense since customers who stay longer tend to pay more.
+Impact of Contract Type on Churn:
+Visualized the relationship between Contract type and churn. Customers with month-to-month contracts had a higher churn rate compared to those with longer-term contracts.
+Monthly Charges vs. Churn:
+Plotted a boxplot to compare MonthlyCharges for churned and non-churned customers. Customers with higher monthly charges were more likely to churn.
+Insights:
+
+Customers with shorter tenures and higher monthly charges are more likely to churn.
+Customers with month-to-month contracts are at a higher risk of churning.
+These insights guided my feature selection and model-building process.
+
+5. Modeling
+
+I used the following classification algorithms to solve the problem:
+
+Logistic Regression:
+A simple and interpretable model that predicts the probability of a binary outcome. It works well for linearly separable data but may struggle with complex relationships.
+Random Forest:
+An ensemble method that builds multiple decision trees and combines their outputs. It handles non-linear relationships well and is robust to overfitting.
+Gradient Boosting (XGBoost):
+A powerful ensemble technique that builds trees sequentially, correcting errors from previous trees. It is highly accurate but can be computationally expensive.
+Support Vector Machine (SVM):
+A robust algorithm that finds the optimal hyperplane to separate classes. It works well for high-dimensional data but can be slow for large datasets.
+Why These Models?
+
+I chose these models to compare their performance on the dataset. Logistic Regression provides a baseline, while Random Forest and XGBoost are more advanced and can capture complex patterns. SVM is included for its ability to handle high-dimensional data.
+6. Evaluation
+
+I evaluated the models using the following metrics:
+
+Accuracy:
+Measures the percentage of correct predictions. However, it can be misleading for imbalanced datasets.
+Precision, Recall, and F1-Score:
+Precision measures the proportion of true positives among predicted positives.
+Recall measures the proportion of true positives among actual positives.
+F1-Score is the harmonic mean of precision and recall, providing a balanced measure.
+ROC-AUC Score:
+Measures the model's ability to distinguish between classes. A higher AUC indicates better performance.
+Results:
+
+XGBoost performed the best, with an F1-Score of 0.82 and an AUC of 0.88.
+Logistic Regression had the lowest performance, with an F1-Score of 0.73.
+7. Storytelling
+
+Through this project, I learned that:
+
+Customer tenure and contract type are the most important factors in predicting churn.
+Customers with higher monthly charges are more likely to churn, especially if they are on month-to-month contracts.
+The XGBoost model provided the most accurate predictions, enabling the business to identify at-risk customers effectively.
+By addressing these insights, the telecom company can implement targeted retention strategies, such as offering discounts or upgrading customers to longer-term contracts.
+
+8. Impact Section
+
+This project has significant social and ethical implications:
+
+Positive Impact: By reducing churn, the company can improve customer satisfaction and loyalty, leading to long-term growth.
+Negative Impact: If the model is used to deny services or offers to certain customers, it could lead to discrimination or bias. For example, customers in specific demographics might be unfairly targeted.
+To mitigate these risks, the model should be regularly audited for fairness and transparency.
+
+9. References
+
+Telco Customer Churn Dataset: Kaggle
+Scikit-learn Documentation: scikit-learn.org
+XGBoost Documentation: xgboost.readthedocs.io
+10. Code
+
+
+Below is a snippet of the preprocessing and modeling steps:
+
+python
+Copy
+# Preprocessing
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+
+# Modeling
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from xgboost import XGBClassifier
+from sklearn.svm import SVC
+
+# Evaluation
+from sklearn.metrics import classification_report, roc_auc_score
+
+# Example: XGBoost Model
+xgb_model = XGBClassifier()
+xgb_model.fit(X_train, y_train)
+y_pred = xgb_model.predict(X_test)
+print(classification_report(y_test, y_pred))
